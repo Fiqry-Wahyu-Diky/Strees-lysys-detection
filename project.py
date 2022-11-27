@@ -23,7 +23,7 @@ from sklearn.metrics import accuracy_score
 
 st.write(""" 
 # APLIKASI CEK TINGKAT STRESS MANUSIA
-Oleh 20041110125
+Oleh | FIQRY WAHYU DIKY W | 20041110125
 """)
 
 import streamlit as st
@@ -202,7 +202,7 @@ with implementation:
             # st.write(y_test)
             # st.write(hasil_accuracy)
 
-            #dhfjg
+            
 
 
 
