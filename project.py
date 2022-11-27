@@ -1,6 +1,7 @@
 import streamlit as st
 import numpy as np
 import pandas as pd
+import warnings
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.model_selection import train_test_split
 from collections import OrderedDict
@@ -17,9 +18,11 @@ import joblib
 import altair as alt
 from streamlit_option_menu import option_menu
 from sklearn.metrics import accuracy_score
+showWarningOnDirectExecution = False
 # [theme]
 # base="dark"
 # primaryColor="purple"
+warnings.filterwarnings("ignore")
 
 st.write(""" 
 # APLIKASI CEK TINGKAT STRESS MANUSIA
@@ -56,6 +59,7 @@ with import_data:
         st.write("="*25," Nilai maksimal data","="*25,"\n",round(data_max,2))
         st.write("="*25," Nilai minimal data","="*25,"\n",data_min)
         st.write("="*25," Nilai data kosong","="*30,"\n",data_kosong)
+        
 
 
 with preprocessing:
