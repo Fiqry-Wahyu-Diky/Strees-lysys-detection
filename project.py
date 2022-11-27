@@ -35,7 +35,7 @@ import streamlit as st
 # with st.sidebar:
 #     st.title("Home")    
 
-import_data, preprocessing, modeling, evaluation, implementation = st.tabs(["Import Data", "Pre Processing", "Modeling", "Evaluation", "Implementation"])
+import_data, preprocessing, modeling,  implementation = st.tabs(["Import Data", "Pre Processing", "Modeling", "Implementation"])
 
 
 
