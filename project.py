@@ -112,27 +112,27 @@ with modeling:
     # st.write(accuracy_score(y_test, y_pred_knn))
     # scoress = st.pd.dataframe(scores)
 
-    #===================== Naive Bayes =======================
-    gaussian    = GaussianNB()
-    gaussian.fit(X_train, y_train)
-    Y_pred_GS   = gaussian.predict(X_test)
-    Gauss_accuracy  = round(100*accuracy_score(y_test, Y_pred_GS),2)
+    # #===================== Naive Bayes =======================
+    # gaussian    = GaussianNB()
+    # gaussian.fit(X_train, y_train)
+    # Y_pred_GS   = gaussian.predict(X_test)
+    # Gauss_accuracy  = round(100*accuracy_score(y_test, Y_pred_GS),2)
 
-    #==================== Decission Tree =====================
-    DecissionT = DecisionTreeClassifier(criterion="gini")
-    DecissionT.fit(X_train,y_train)
-    y_pred_DS   = DecissionT.predict(X_test)
-    ds_accuracy = round(100*accuracy_score(y_test, y_pred_DS),2)
+    # #==================== Decission Tree =====================
+    # DecissionT = DecisionTreeClassifier(criterion="gini")
+    # DecissionT.fit(X_train,y_train)
+    # y_pred_DS   = DecissionT.predict(X_test)
+    # ds_accuracy = round(100*accuracy_score(y_test, y_pred_DS),2)
     
 
     
 
     if knn_cek:
         st.write(knn_accuracy)
-    if Gauss:
-        st.write(Gauss_accuracy)
-    if Ds:
-        st.write(ds_accuracy)
+    # if Gauss:
+    #     st.write(Gauss_accuracy)
+    # if Ds:
+    #     st.write(ds_accuracy)
 
 with implementation:
     st.write("# IMPLEMENTATION")
@@ -141,63 +141,63 @@ with implementation:
     temperature_mean = st.number_input("Masukkan rata-rata Suhu", min_value=79, max_value=99)
     step_count_mean = st.number_input("Masukkan rata-rata hitungan langkah", min_value=0, max_value=200)
 
-    if knn_accuracy > Gauss_accuracy and knn_accuracy > ds_accuracy:
-        hasil_max = knn_accuracy
-    elif Gauss_accuracy > knn_accuracy and Gauss_accuracy > ds_accuracy:
-        hasil_max = Gauss_accuracy
-    else:
-        hasil_max = ds_accuracy
+    # if knn_accuracy > Gauss_accuracy and knn_accuracy > ds_accuracy:
+    #     hasil_max = knn_accuracy
+    # elif Gauss_accuracy > knn_accuracy and Gauss_accuracy > ds_accuracy:
+    #     hasil_max = Gauss_accuracy
+    # else:
+    #     hasil_max = ds_accuracy
     
-    # st.write(hasil_max)
+    # # st.write(hasil_max)
     
-    st.write("Cek apakah Strees anda termasuk Rendah, Sedang, atau Tinggi")
-    cek_rumus = st.button('Cek Strees')
-    inputan = [[humidity_mean, temperature_mean, step_count_mean]]
-    # scaler  = MinMaxScaler()
-    inputan_normal = scaler.transform(inputan) #normalisasi inputan
-    # st.write(inputan)
-    # st.write(inputan_normal)
-    # FIRST_IDX = 0
-    if cek_rumus:
-        if hasil_max == ds_accuracy:
-            hasil_tes       = DecisionTreeClassifier(criterion="gini")
-            hasil_tes.fit(X_train, y_train)
-            hasil_pred      = hasil_tes.predict(inputan_normal)
-            # st.write(hasil_pred)
-            # hasil_accuracy  = round(100*accuracy_score(y_test, hasil_pred),2)
-            st.write("DS")
-            if hasil_pred == 0:
-                st.write("Low")
-            elif hasil_pred == 1:
-                st.write ("Normal")
-            else:
-                st.write("High")
+    # st.write("Cek apakah Strees anda termasuk Rendah, Sedang, atau Tinggi")
+    # cek_rumus = st.button('Cek Strees')
+    # inputan = [[humidity_mean, temperature_mean, step_count_mean]]
+    # # scaler  = MinMaxScaler()
+    # inputan_normal = scaler.transform(inputan) #normalisasi inputan
+    # # st.write(inputan)
+    # # st.write(inputan_normal)
+    # # FIRST_IDX = 0
+    # if cek_rumus:
+    #     if hasil_max == ds_accuracy:
+    #         hasil_tes       = DecisionTreeClassifier(criterion="gini")
+    #         hasil_tes.fit(X_train, y_train)
+    #         hasil_pred      = hasil_tes.predict(inputan_normal)
+    #         # st.write(hasil_pred)
+    #         # hasil_accuracy  = round(100*accuracy_score(y_test, hasil_pred),2)
+    #         st.write("DS")
+    #         if hasil_pred == 0:
+    #             st.write("Low")
+    #         elif hasil_pred == 1:
+    #             st.write ("Normal")
+    #         else:
+    #             st.write("High")
 
-        elif hasil_max == knn_accuracy: 
-            k_range = range(1,50)
-            for k in k_range:
-                hasil_tes = KNeighborsClassifier(n_neighbors=k)
-                hasil_tes.fit(X_train, y_train)
-                hasil_pred = knn.predict(inputan_normal)
-            st.write("knn")
-            if hasil_pred == 0:
-                st.write("Low")
-            elif hasil_pred == 1:
-                st.write ("Normal")
-            else:
-                st.write("High")
+    #     elif hasil_max == knn_accuracy: 
+    #         k_range = range(1,50)
+    #         for k in k_range:
+    #             hasil_tes = KNeighborsClassifier(n_neighbors=k)
+    #             hasil_tes.fit(X_train, y_train)
+    #             hasil_pred = knn.predict(inputan_normal)
+    #         st.write("knn")
+    #         if hasil_pred == 0:
+    #             st.write("Low")
+    #         elif hasil_pred == 1:
+    #             st.write ("Normal")
+    #         else:
+    #             st.write("High")
         
-        else:
-            hasil_tes  = GaussianNB()
-            hasil_tes.fit(X_train, y_train)
-            hasil_pred  = gaussian.predict(inputan_normal)
-            st.write("NB")
-            if hasil_pred == 0:
-                st.write("Low")
-            elif hasil_pred == 1:
-                st.write ("Normal")
-            else:
-                st.write("High")
+    #     else:
+    #         hasil_tes  = GaussianNB()
+    #         hasil_tes.fit(X_train, y_train)
+    #         hasil_pred  = gaussian.predict(inputan_normal)
+    #         st.write("NB")
+    #         if hasil_pred == 0:
+    #             st.write("Low")
+    #         elif hasil_pred == 1:
+    #             st.write ("Normal")
+    #         else:
+    #             st.write("High")
 
             # st.write(y_test)
             # st.write(hasil_accuracy)
