@@ -116,17 +116,17 @@ with modeling:
     # st.write(accuracy_score(y_test, y_pred_knn))
     # scoress = st.pd.dataframe(scores)
 
-    # #===================== Naive Bayes =======================
-    # gaussian    = GaussianNB()
-    # gaussian.fit(X_train, y_train)
-    # Y_pred_GS   = gaussian.predict(X_test)
-    # Gauss_accuracy  = round(100*accuracy_score(y_test, Y_pred_GS),2)
+    #===================== Naive Bayes =======================
+    gaussian    = GaussianNB()
+    gaussian.fit(X_train, y_train)
+    Y_pred_GS   = gaussian.predict(X_test)
+    Gauss_accuracy  = round(100*accuracy_score(y_test, Y_pred_GS),2)
 
-    # #==================== Decission Tree =====================
-    # DecissionT = DecisionTreeClassifier(criterion="gini")
-    # DecissionT.fit(X_train,y_train)
-    # y_pred_DS   = DecissionT.predict(X_test)
-    # ds_accuracy = round(100*accuracy_score(y_test, y_pred_DS),2)
+    #==================== Decission Tree =====================
+    DecissionT = DecisionTreeClassifier(criterion="gini")
+    DecissionT.fit(X_train,y_train)
+    y_pred_DS   = DecissionT.predict(X_test)
+    ds_accuracy = round(100*accuracy_score(y_test, y_pred_DS),2)
     
 
     
