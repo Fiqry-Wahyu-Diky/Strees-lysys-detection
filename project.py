@@ -98,8 +98,8 @@ with modeling:
     st.write("Pilih metode yang digunakan")
     # st.write("Nilai Score dari semuaa K \n",scores)
     knn_cek = st.checkbox("KNN")
-    # Gauss   = st.checkbox("Gaussian Naive-Bayes")
-    # Ds      = st.checkbox("Decission Tree")
+    Gauss   = st.checkbox("Gaussian Naive-Bayes")
+    Ds      = st.checkbox("Decission Tree")
 
 
     #=================== modeling KNN =====================
