@@ -9,19 +9,19 @@ from sklearn.naive_bayes import GaussianNB
 from sklearn.metrics import confusion_matrix, accuracy_score, recall_score, precision_score, f1_score
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.tree import DecisionTreeClassifier
+import altair as alt
+from streamlit_option_menu import option_menu
+from sklearn.metrics import accuracy_score
 # from sklearn.ensemble import BaggingClassifier
 # from sklearn.datasets import make_classification
 # from sklearn.svm import SVC
 # from sklearn import metrics
 # from pickle import dump
 # import joblib
-import altair as alt
-from streamlit_option_menu import option_menu
-from sklearn.metrics import accuracy_score
-from PIL import Image
-from awesome_table import AwesomeTable
+# from PIL import Image
+# from awesome_table import AwesomeTable
 # %matplotlib inline
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 # showWarningOnDirectExecution = False
 
 with st.sidebar:
