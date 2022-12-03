@@ -166,11 +166,11 @@ else:
         name = st.text_input("Masukkan nama anda")
         col1,col2,col3 = st.columns(3)
         with col1:
-            humidity_mean = st.number_input("Masukkan Rata-rata Kelembaban", min_value=10.00, max_value=30.00)
+            humidity_mean = st.number_input("Masukkan Rata-rata Kelembaban (10.00 - 30.00)", min_value=10.00, max_value=30.00)
         with col2:
-            temperature_mean = st.number_input("Masukkan rata-rata Suhu", min_value=79.00, max_value=99.00)
+            temperature_mean = st.number_input("Masukkan rata-rata Suhu (79.00 - 99.00) Fahrenheit", min_value=79.00, max_value=99.00)
         with col3:
-            step_count_mean = st.number_input("Masukkan rata-rata hitungan langkah", min_value=0.00, max_value=200.00)
+            step_count_mean = st.number_input("Masukkan rata-rata hitungan langkah (0.00 - 200.00)", min_value=0.00, max_value=200.00)
 
         cek_hasil = st.button("Cek Prediksi")
 #============================ Mengambil akurasi tertinggi ===========================
