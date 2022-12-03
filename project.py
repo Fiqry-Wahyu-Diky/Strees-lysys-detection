@@ -9,205 +9,191 @@ from sklearn.naive_bayes import GaussianNB
 from sklearn.metrics import confusion_matrix, accuracy_score, recall_score, precision_score, f1_score
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.tree import DecisionTreeClassifier
-from sklearn.ensemble import BaggingClassifier
-from sklearn.datasets import make_classification
-from sklearn.svm import SVC
-from sklearn import metrics
-from pickle import dump
-import joblib
+# from sklearn.ensemble import BaggingClassifier
+# from sklearn.datasets import make_classification
+# from sklearn.svm import SVC
+# from sklearn import metrics
+# from pickle import dump
+# import joblib
 import altair as alt
 from streamlit_option_menu import option_menu
 from sklearn.metrics import accuracy_score
-showWarningOnDirectExecution = False
-# [theme]
-# base="dark"
-# primaryColor="purple"
-warnings.filterwarnings("ignore")
+from PIL import Image
+from awesome_table import AwesomeTable
+# %matplotlib inline
+import matplotlib.pyplot as plt
+# showWarningOnDirectExecution = False
 
-st.write(""" 
-# APLIKASI CEK TINGKAT STRESS MANUSIA
-Oleh | FIQRY WAHYU DIKY W | 20041110125
-""")
+with st.sidebar:
+    selected = option_menu(
+        menu_title= "MENU",
+        options=["HOME","FITUR","PROJECT"],
+    )
 
-import streamlit as st
+if selected == "HOME":
+    st.markdown ('<h1 style = "text-align: center;"> STRES </h1>', unsafe_allow_html = True)
+    # gambar = Image.open("stress.png")
+    col1,col2,col3 = st.columns(3)
+    with col1:
+        st.write(' ')
+    with col2:
+        st.image("stress.png",width=300)
+    with col3:
+        st.write(' ')
 
-# "with" notation
-# with st.sidebar:
-#     st.title("Home")    
+    st.write(' ')
+    st.markdown ('<p style = "text-align: justify;"> <b> Stres </b> adalah reaksi seseorang baik secara fisik maupun emosional (mental/psikis) apabila ada perubahan dari lingkungan yang mengharuskan seseorang menyesuaikan diri. Stres adalah bagian alami dan penting dari kehidupan, tetapi apabila berat dan berlangsung lama dapat merusak kesehatan kita. </p>', unsafe_allow_html = True)
 
-import_data, preprocessing, modeling,  implementation = st.tabs(["Import Data", "Pre Processing", "Modeling", "Implementation"])
-
-
-
-with import_data:
-    st.write("# IMPORT DATA")
-    uploaded_data = st.file_uploader("Upload Data Set yang Mau Digunakan", accept_multiple_files=True)
-    cek_data, keterangan  = st.tabs(["Data","Keterangan"])
-    for uploaded_data in uploaded_data:
-        data = pd.read_csv(uploaded_data)
-    with cek_data:
-        st.write("Nama Dataset:", uploaded_data.name)
-        st.write(data)
-    with keterangan:
-        st.write("### Berikut keterangan dari data anda")
-        tipe_data   = data.dtypes
-        data_max    = data.max()
-        data_min    = data.min()
-        data_kosong = data.isnull().sum()
-        # fitur       = 
-        st.write("="*25," Tipe data","="*25,"\n",tipe_data)
-        st.write("="*25," Nilai maksimal data","="*25,"\n",round(data_max,2))
-        st.write("="*25," Nilai minimal data","="*25,"\n",data_min)
-        st.write("="*25," Nilai data kosong","="*30,"\n",data_kosong)
-        
-
-
-with preprocessing:
-    st.write("# PRE PROCESSING")
-    st.write("Data anda sudah ternormalisasi? jika belum maka klik Normalisasi")
-    # encoding = st.checkbox("Encoding (Category to Numeric)")
-    data_asli = st.checkbox('Tampil Data')
-    normalisasi = st.checkbox('Normalisasi data')
-    if data_asli:
-        st.write(data)
-    if normalisasi:
-        st.write("Melakukan Normalisasi pada semua fitur") 
-        # normalisasi/standaritation
-        scaler  = MinMaxScaler()
-        scaled  = scaler.fit_transform(data[['Humidity','Temperature','Step count']])
-        kolom_normalisasi = ["Humaditiy","Temperature","Step count"]
-        data_normalisasi = pd.DataFrame(scaled,columns=kolom_normalisasi)
-
-        st.write (data_normalisasi)
-
-
-with modeling:
-    st.write("# MODELING")
-    # k_nn, naive_bayes, ds_tree = st.tabs(["K-NN", "Naive Bayes", "Decission Tree"])
-    X = data_normalisasi.iloc[:,:4]
-    # st.write(x)
-    Y = data.iloc[:,-1]
-    # st.write(Y)
-    X_train, X_test, y_train, y_test    = train_test_split(X,Y, test_size=0.4, random_state=1)
-
-    # st.write(y_test.shape)
-    # st.write(X_test.shape)
-    # st.write(y_train.shape)
-    # st.write(X_train.shape)
-
-    st.write("Pilih metode yang digunakan")
-    # st.write("Nilai Score dari semuaa K \n",scores)
-    knn_cek = st.checkbox("KNN")
-    Gauss   = st.checkbox("Gaussian Naive-Bayes")
-    Ds      = st.checkbox("Decission Tree")
-
-
-    #=================== modeling KNN =====================
-    scores = {}
-    scores_list = []
-    k_range = range(1,50)
-    for k in k_range:
-        knn = KNeighborsClassifier(n_neighbors=k)
-        knn.fit(X_train, y_train)
-        y_pred_knn = knn.predict(X_test)
-        # scores[k] = metrics.accuracy_score(y_test,y_pred_knn)
-        # scores_list.append(metrics.accuracy_score(y_test,y_pred_knn))
-    knn_accuracy = round(100 * accuracy_score(y_test, y_pred_knn), 2)
-    # st.write(accuracy_score(y_test, y_pred_knn))
-    # scoress = st.pd.dataframe(scores)
-
-    #===================== Naive Bayes =======================
-    gaussian    = GaussianNB()
-    gaussian.fit(X_train, y_train)
-    Y_pred_GS   = gaussian.predict(X_test)
-    Gauss_accuracy  = round(100*accuracy_score(y_test, Y_pred_GS),2)
-
-    #==================== Decission Tree =====================
-    DecissionT = DecisionTreeClassifier(criterion="gini")
-    DecissionT.fit(X_train,y_train)
-    y_pred_DS   = DecissionT.predict(X_test)
-    ds_accuracy = round(100*accuracy_score(y_test, y_pred_DS),2)
+    st.write(' ')
+    st.markdown ('<p style = "text-align: justify;"> Stres pada manusia dapat diklasifikasikan menjadi eustres, neustres, dan distres. Eustress dianggap sebagai stres yang “baik” dan dapat memotivasi seseorang untuk meningkatkan kinerja. Stres netral disebut neustress. Karena tidak membahayakan kesejahteraan seseorang, itu dapat diabaikan. Stres dengan efek negatif pada tubuh manusia disebut kesusahan dan merupakan jenis stres yang penting untuk difokuskan. Tergantung pada karakteristik waktunya, distres diklasifikasikan menjadi stres akut dan kronis. Stres akut adalah tingkat stres yang singkat tetapi intens, sedangkan tingkat intens jangka panjang dianggap sebagai stres kronis. Stres kronis memiliki konsekuensi yang sangat serius pada hidup sehat manusia. Stres meningkatkan ketegangan otot dan menyebabkan gangguan dalam aktivitas fisik sehari-hari.</p>', unsafe_allow_html = True)
     
+elif selected == "FITUR":
+    st.markdown ('<h1 style = "text-align: center;"> FITUR DATA </h1>', unsafe_allow_html = True)
+    st.markdown('<p style = "text-align: justify;">Dalam menentukan nilai yang dilakukan untuk pengklasifikasian sistem ini maka diperlukan beberapa data pada fitur-fitur yang diperlukan, terdapat 3 fitur yang digunakan sebagai parameter pengklasifikasian data, yaitu:</p><ol><b>1. Humidity (Kelembaban keringat)</b></ol><p style="text-align:justify;">Kelembaban yang digunakan yaitu Kelembaban sekresi keringat yang berhubungan dengan sistem saraf pusat, dengan menggunakan <b style ="color:yellow">Humidity Sensor</b> akan mengetahui kuantitas fisik yang dikeluarkan melalui pori-pori kulit dalam jumlah tertentu sebagai reaksi terhadap panas, latihan fisik dan perubahan emosi. Saat keringat tubuh meningkat, aliran arus antara dua elektroda meningkat membuat tubuh manusia efektif sebagai resistor variabel. Sensor yang mendeteksi kelembapan dapat digunakan untuk memantau tingkat sekresi keringat yang dikendalikan oleh sistem saraf pusat manusia. Memantau jumlah keringat yang dihasilkan dapat membantu menemukan tingkat stres dan gairah subjek yang dipantau. Aktivitas kelenjar keringat sebagai variabel digunakan dalam banyak aplikasi biofeedback seperti deteksi kebohongan, dan pengenalan emosi. Proses berkeringat normal disebut keringat sedangkan gangguan keringat berlebih dikenal sebagai hiperhidrosis dan berhubungan dengan emosional, stres pekerjaan dan sosial. Dalam hal ini digunakan sensor kelembaban untuk mendeteksi sekresi keringat pada telapak tangan.</p> <ol><b>2. Temperature (Suhu tubuh)</b></ol> <p style="text-align:justify">Tingkat suhu adalah tingkat variasi suhu tubuh dalam jumlah waktu tertentu. Secara umum, sensor suhu dapat diklasifikasikan dalam 2 jenis: Sensor suhu kontak yang mengukur suhu saat diletakkan di tubuh dan sensor non-kontak yang mengukur radiasi infra merah atau optik yang diterima dari area tubuh mana pun. Untuk mengukur suhu tubuh mnggunakan <b style ="color:yellow">sensor suhu kontak</b> yang dapat memantau laju variasi suhu tubuh.</p> <ol><b>3. Step count (Jumlah langkah)</b></ol><p style="text-align:justify">Dengan melakukan sebuah aktivitas maka dapat mempengaruhi stres pada manusia, untuk mengukur laju perubahan kecepatan suatu benda digunakan <b style ="color:yellow">sensor akselerometer</b>. Yang terdiri dari tiga akselerometer terpisah yang dipasang secara ortogonal pada sistem 3 sumbu fisik (x,y, danz). Gaya yang menyebabkan percepatan bisa statis atau dinamis.yang diukur dalam meter per detik persegi (m/s2)</p>',unsafe_allow_html=True)
 
+else:
+    st.markdown ('<h1 style = "text-align: center;"> CEK TINGKAT STRES</h1>', unsafe_allow_html = True)
+    st.write("Oleh | FIQRY WAHYU DIKY W | 200411100125")
+    data, preprocessing, modelling, implementasi = st.tabs(["Data","Preprocessing","Modelling","Implementasi"])
+#=============================================================================
+    with data:
+        dataset, keterangan = st.tabs(["Dataset", "Keterangan"])
+        with dataset:
+            st.write("# Data")
+            data = pd.read_csv("Stress-Lysis.csv")
+            data
+        with keterangan:
+            st.write("Berikut beberapa keterangan yang ada dalam dataset:")
+            st.info("#### Tipe data")
+            data.dtypes
+            #===================================
+            st.info("#### Nilai min-maks data")
+            col1,col2 = st.columns(2)
+            with col1:
+                st.write("##### Nilai minimum")
+                st.write(data.min())
+            with col2:
+                st.write("##### Nilai maksimal")
+                st.write(data.max())
+            #===================================
+            st.info("##### Data kosong")
+            st.write(data.isnull().sum())
+
+#======================= Preprocessing =================================           
+    with preprocessing:
+        st.write("# Preprocessing")
+        st.write("Sebelum melakukan modelling data harus diprocessing dahulu agar komputasi sistem lebih mudah dibaca, akurasi data, kelengkapan, konsistensi, ketepatan waktu, tepercaya, serta dapat diinterpretasi dengan baik")
+        col1, col2 = st.columns(2)
+        with col1:
+            st.info("Data sebelum Normalisasi")
+            st.write(data[['Humidity','Temperature','Step count']])
+        with col2:
+            st.info("Data Normalisasi")
+            scaler  = MinMaxScaler()
+            scaled  = scaler.fit_transform(data[['Humidity','Temperature','Step count']])
+            kolom_normalisasi   = ["Humaditiy","Temperature","Step count"]
+            data_normalisasi    = pd.DataFrame(scaled,columns=kolom_normalisasi)
+            st.write (data_normalisasi)
+#=========================== Modeling ===============================
+    with modelling:
+        st.write("# Modeling")
+        st.write("Dalam sistem ini menggunakan 3 modeling yaitu KNN, Naive-Bayes, dan Decission Tree")
+        knn_cekbox          = st.checkbox("KNN")
+        bayes_gaussian_cekbox  = st.checkbox("Naive-Bayes Gaussian")
+        decission3_cekbox     = st.checkbox("Decission Tree")
+#=========================== Spliting data ======================================
+        X   = data_normalisasi.iloc[:,:4]
+        # X
+        Y  = data.iloc[:,-1]
+        # Y
+        X_train, X_test, Y_train, Y_test    = train_test_split(X,Y, test_size=0.3, random_state=1)
+        # st.write(X_train)
+        # st.write(X_test)
+        # st.write(Y_train)
+        # st.write(Y_test)
+#============================ Model =================================
+    #===================== KNN =======================
+        k_range = range(1,51)
+        scores = {}
+        scores_list = []
+        for k in k_range:
+            knn = KNeighborsClassifier(n_neighbors=k)
+            knn.fit(X_train, Y_train)
+            y_pred_knn = knn.predict(X_test)
+            # scores[k] = metrics.accuracy_score(Y_test,y_pred_knn)
+            # scores_list.append(metrics.accuracy_score(Y_test,y_pred_knn))
+        knn_accuracy = round(100 * accuracy_score(Y_test, y_pred_knn), 2)
+        # scoress = st.pd.dataframe(scores)
+
+    #===================== Bayes Gaussian =============
+        gaussian    = GaussianNB()
+        gaussian.fit(X_train,Y_train)
+        y_pred_gs   =  gaussian.predict(X_test)
+        gauss_accuracy  = round(100*accuracy_score(Y_test, y_pred_gs),2)
+
+    #===================== Decission tree =============
+        decission3  = DecisionTreeClassifier(criterion="gini")
+        decission3.fit(X_train,Y_train)
+        y_pred_decission3 = decission3.predict(X_test)
+        decission3_accuracy = round(100*accuracy_score(Y_test, y_pred_decission3),2)
+        st.markdown("---")
     
+    #===================== Cek Box ====================
+        if knn_cekbox:
+            st.write("##### KNN")
+            st.warning("Dengan menggunakan metode KNN yang menggunakan nilai K = 1-50 didapatkan akurasi  sebesar:")
+            # st.warning(knn_accuracy)
+            st.warning(f"akurasi  =  {knn_accuracy}%")
+            st.markdown("---")
 
-    if knn_cek:
-        st.write(knn_accuracy)
-    # if Gauss:
-    #     st.write(Gauss_accuracy)
-    # if Ds:
-    #     st.write(ds_accuracy)
-
-with implementation:
-    st.write("# IMPLEMENTATION")
-    # nama_pasien = st.text_input("Masukkan nama anda")
-    humidity_mean = st.number_input("Masukkan Rata-rata Kelembaban", min_value=10, max_value=30)
-    temperature_mean = st.number_input("Masukkan rata-rata Suhu", min_value=79, max_value=99)
-    step_count_mean = st.number_input("Masukkan rata-rata hitungan langkah", min_value=0, max_value=200)
-
-    # if knn_accuracy > Gauss_accuracy and knn_accuracy > ds_accuracy:
-    #     hasil_max = knn_accuracy
-    # elif Gauss_accuracy > knn_accuracy and Gauss_accuracy > ds_accuracy:
-    #     hasil_max = Gauss_accuracy
-    # else:
-    #     hasil_max = ds_accuracy
-    
-    # # st.write(hasil_max)
-    
-    # st.write("Cek apakah Strees anda termasuk Rendah, Sedang, atau Tinggi")
-    # cek_rumus = st.button('Cek Strees')
-    # inputan = [[humidity_mean, temperature_mean, step_count_mean]]
-    # # scaler  = MinMaxScaler()
-    # inputan_normal = scaler.transform(inputan) #normalisasi inputan
-    # # st.write(inputan)
-    # # st.write(inputan_normal)
-    # # FIRST_IDX = 0
-    # if cek_rumus:
-    #     if hasil_max == ds_accuracy:
-    #         hasil_tes       = DecisionTreeClassifier(criterion="gini")
-    #         hasil_tes.fit(X_train, y_train)
-    #         hasil_pred      = hasil_tes.predict(inputan_normal)
-    #         # st.write(hasil_pred)
-    #         # hasil_accuracy  = round(100*accuracy_score(y_test, hasil_pred),2)
-    #         st.write("DS")
-    #         if hasil_pred == 0:
-    #             st.write("Low")
-    #         elif hasil_pred == 1:
-    #             st.write ("Normal")
-    #         else:
-    #             st.write("High")
-
-    #     elif hasil_max == knn_accuracy: 
-    #         k_range = range(1,50)
-    #         for k in k_range:
-    #             hasil_tes = KNeighborsClassifier(n_neighbors=k)
-    #             hasil_tes.fit(X_train, y_train)
-    #             hasil_pred = knn.predict(inputan_normal)
-    #         st.write("knn")
-    #         if hasil_pred == 0:
-    #             st.write("Low")
-    #         elif hasil_pred == 1:
-    #             st.write ("Normal")
-    #         else:
-    #             st.write("High")
-        
-    #     else:
-    #         hasil_tes  = GaussianNB()
-    #         hasil_tes.fit(X_train, y_train)
-    #         hasil_pred  = gaussian.predict(inputan_normal)
-    #         st.write("NB")
-    #         if hasil_pred == 0:
-    #             st.write("Low")
-    #         elif hasil_pred == 1:
-    #             st.write ("Normal")
-    #         else:
-    #             st.write("High")
-
-            # st.write(y_test)
-            # st.write(hasil_accuracy)
-
+        if bayes_gaussian_cekbox:
+            st.write("##### Naive Bayes Gausssian")
+            st.info("Dengan menggunakan metode Bayes Gaussian didapatkan hasil akurasi sebesar:")
+            st.info(f"Akurasi = {gauss_accuracy}%")
+            st.markdown("---")
+        if decission3_cekbox:
+            st.write("##### Decission Tree")
+            st.success("Dengan menggunakan metode Decission tree didapatkan hasil akurasi sebesar:")
+            st.success(f"Akurasi = {decission3_accuracy}%")
             
+#=========================== Implementasi ===============================
+    with implementasi:
+        st.write("# Implementasi")
+        st.info("Dalam melakukan pengecekan tingkat stres harus menggunakan 3 fitur data yang didapatkan dari melakukan beberapa aktivitas dan diukur menggunakan sebuah sensor. Aktivitas:")
+        st.image("aktivitas.png",width=300)
+        st.markdown("---")
+        st.write("##### Input fitur")
+        name = st.text_input("Masukkan nama anda")
+        col1,col2,col3 = st.columns(3)
+        with col1:
+            humidity_mean = st.number_input("Masukkan Rata-rata Kelembaban", min_value=10, max_value=30)
+        with col2:
+            temperature_mean = st.number_input("Masukkan rata-rata Suhu", min_value=79, max_value=99)
+        with col3:
+            step_count_mean = st.number_input("Masukkan rata-rata hitungan langkah", min_value=0, max_value=200)
 
-
-
-
+        cek_hasil = st.button("Cek Prediksi")
+#============================ Mengambil akurasi tertinggi ===========================
+        if knn_accuracy > gauss_accuracy and knn_accuracy > decission3_accuracy:
+            use_model = knn
+            metode = "KNN"
+        elif gauss_accuracy > knn_accuracy and gauss_accuracy > decission3_accuracy:
+            use_model = gaussian
+            metode = "Naive-Bayes Gaussian"
+        else:
+            use_model = decission3
+            metode = "Decission Tree"
+#============================ Normalisasi inputan =============================
+        inputan = [[humidity_mean, temperature_mean, step_count_mean]]
+        inputan_norm = scaler.transform(inputan)
+        # inputan_norm
+        # inputan
+        FIRST_IDX = 0
+        if cek_hasil:
+            hasil_prediksi = use_model.predict(inputan_norm)[FIRST_IDX]
+            if hasil_prediksi == 0:
+                st.success(f"{name} Terdeteksi tingkat stress tergolong Rendah, dengan tingkat = {hasil_prediksi} Berdasarkan metode {metode}")
+            elif hasil_prediksi == 1:
+                st.warning(f"{name} Terdeteksi tingkat stress tergolong Normal, dengan tingkat = {hasil_prediksi} Berdasarkan metode {metode}")
+            else:
+                st.error(f"{name} Terdeteksi tingkat stress tergolong Tinggi, dengan tingkat = {hasil_prediksi} Berdasarkan metode {metode}")
