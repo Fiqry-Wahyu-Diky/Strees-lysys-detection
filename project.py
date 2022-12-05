@@ -12,6 +12,7 @@ from sklearn.tree import DecisionTreeClassifier
 import altair as alt
 from streamlit_option_menu import option_menu
 from sklearn.metrics import accuracy_score
+from sklearn.metrics import classification_report
 # from sklearn.ensemble import BaggingClassifier
 # from sklearn.datasets import make_classification
 # from sklearn.svm import SVC
@@ -21,7 +22,7 @@ from sklearn.metrics import accuracy_score
 # from PIL import Image
 # from awesome_table import AwesomeTable
 # %matplotlib inline
-# import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt
 # showWarningOnDirectExecution = False
 
 with st.sidebar:
@@ -49,12 +50,12 @@ if selected == "HOME":
     
 elif selected == "FITUR":
     st.markdown ('<h1 style = "text-align: center;"> FITUR DATA </h1>', unsafe_allow_html = True)
-    st.markdown('<p style = "text-align: justify;">Dalam menentukan nilai yang dilakukan untuk pengklasifikasian sistem ini maka diperlukan beberapa data pada fitur-fitur yang diperlukan, terdapat 3 fitur yang digunakan sebagai parameter pengklasifikasian data, yaitu:</p><ol><b>1. Humidity (Kelembaban keringat)</b></ol><p style="text-align:justify;">Kelembaban yang digunakan yaitu Kelembaban sekresi keringat yang berhubungan dengan sistem saraf pusat, dengan menggunakan <b style ="color:yellow">Humidity Sensor</b> akan mengetahui kuantitas fisik yang dikeluarkan melalui pori-pori kulit dalam jumlah tertentu sebagai reaksi terhadap panas, latihan fisik dan perubahan emosi. Saat keringat tubuh meningkat, aliran arus antara dua elektroda meningkat membuat tubuh manusia efektif sebagai resistor variabel. Sensor yang mendeteksi kelembapan dapat digunakan untuk memantau tingkat sekresi keringat yang dikendalikan oleh sistem saraf pusat manusia. Memantau jumlah keringat yang dihasilkan dapat membantu menemukan tingkat stres dan gairah subjek yang dipantau. Aktivitas kelenjar keringat sebagai variabel digunakan dalam banyak aplikasi biofeedback seperti deteksi kebohongan, dan pengenalan emosi. Proses berkeringat normal disebut keringat sedangkan gangguan keringat berlebih dikenal sebagai hiperhidrosis dan berhubungan dengan emosional, stres pekerjaan dan sosial. Dalam hal ini digunakan sensor kelembaban untuk mendeteksi sekresi keringat pada telapak tangan.</p> <ol><b>2. Temperature (Suhu tubuh)</b></ol> <p style="text-align:justify">Tingkat suhu adalah tingkat variasi suhu tubuh dalam jumlah waktu tertentu. Secara umum, sensor suhu dapat diklasifikasikan dalam 2 jenis: Sensor suhu kontak yang mengukur suhu saat diletakkan di tubuh dan sensor non-kontak yang mengukur radiasi infra merah atau optik yang diterima dari area tubuh mana pun. Untuk mengukur suhu tubuh mnggunakan <b style ="color:yellow">sensor suhu kontak</b> yang dapat memantau laju variasi suhu tubuh.</p> <ol><b>3. Step count (Jumlah langkah)</b></ol><p style="text-align:justify">Dengan melakukan sebuah aktivitas maka dapat mempengaruhi stres pada manusia, untuk mengukur laju perubahan kecepatan suatu benda digunakan <b style ="color:yellow">sensor akselerometer</b>. Yang terdiri dari tiga akselerometer terpisah yang dipasang secara ortogonal pada sistem 3 sumbu fisik (x,y, danz). Gaya yang menyebabkan percepatan bisa statis atau dinamis.yang diukur dalam meter per detik persegi (m/s2)</p>',unsafe_allow_html=True)
+    st.markdown('<p style = "text-align: justify;">Dalam menentukan nilai yang dilakukan untuk pengklasifikasian sistem ini maka diperlukan beberapa data pada fitur-fitur yang diperlukan, terdapat 3 fitur yang digunakan sebagai parameter pengklasifikasian data, yaitu:</p><ol><b>1. Humidity (Kelembaban keringat)</b></ol><p style="text-align:justify;">Kelembaban yang digunakan yaitu Kelembaban sekresi keringat yang berhubungan dengan sistem saraf pusat, dengan menggunakan <b style ="color:red">Humidity Sensor</b> akan mengetahui kuantitas fisik yang dikeluarkan melalui pori-pori kulit dalam jumlah tertentu sebagai reaksi terhadap panas, latihan fisik dan perubahan emosi. Saat keringat tubuh meningkat, aliran arus antara dua elektroda meningkat membuat tubuh manusia efektif sebagai resistor variabel. Sensor yang mendeteksi kelembapan dapat digunakan untuk memantau tingkat sekresi keringat yang dikendalikan oleh sistem saraf pusat manusia. Memantau jumlah keringat yang dihasilkan dapat membantu menemukan tingkat stres dan gairah subjek yang dipantau. Aktivitas kelenjar keringat sebagai variabel digunakan dalam banyak aplikasi biofeedback seperti deteksi kebohongan, dan pengenalan emosi. Proses berkeringat normal disebut keringat sedangkan gangguan keringat berlebih dikenal sebagai hiperhidrosis dan berhubungan dengan emosional, stres pekerjaan dan sosial. Dalam hal ini digunakan sensor kelembaban untuk mendeteksi sekresi keringat pada telapak tangan.</p> <ol><b>2. Temperature (Suhu tubuh)</b></ol> <p style="text-align:justify">Tingkat suhu adalah tingkat variasi suhu tubuh dalam jumlah waktu tertentu. Secara umum, sensor suhu dapat diklasifikasikan dalam 2 jenis: Sensor suhu kontak yang mengukur suhu saat diletakkan di tubuh dan sensor non-kontak yang mengukur radiasi infra merah atau optik yang diterima dari area tubuh mana pun. Untuk mengukur suhu tubuh mnggunakan <b style ="color:red">sensor suhu kontak</b> yang dapat memantau laju variasi suhu tubuh.</p> <ol><b>3. Step count (Jumlah langkah)</b></ol><p style="text-align:justify">Dengan melakukan sebuah aktivitas maka dapat mempengaruhi stres pada manusia, untuk mengukur laju perubahan kecepatan suatu benda digunakan <b style ="color:red">sensor akselerometer</b>. Yang terdiri dari tiga akselerometer terpisah yang dipasang secara ortogonal pada sistem 3 sumbu fisik (x,y, danz). Gaya yang menyebabkan percepatan bisa statis atau dinamis.yang diukur dalam meter per detik persegi (m/s2)</p>',unsafe_allow_html=True)
 
 else:
     st.markdown ('<h1 style = "text-align: center;"> CEK TINGKAT STRES</h1>', unsafe_allow_html = True)
     st.write("Oleh | FIQRY WAHYU DIKY W | 200411100125")
-    data, preprocessing, modelling, implementasi = st.tabs(["Data","Preprocessing","Modelling","Implementasi"])
+    data, preprocessing, modelling, evaluasi, implementasi = st.tabs(["Data","Preprocessing","Modelling","Evaluasi","Implementasi"])
 #=============================================================================
     with data:
         dataset, keterangan = st.tabs(["Dataset", "Keterangan"])
@@ -106,7 +107,7 @@ else:
         # X
         Y  = data.iloc[:,-1]
         # Y
-        X_train, X_test, Y_train, Y_test    = train_test_split(X,Y, test_size=0.3, random_state=1)
+        X_train, X_test, Y_train, Y_test    = train_test_split(X,Y, test_size=0.3, random_state=0)
         # st.write(X_train)
         # st.write(X_test)
         # st.write(Y_train)
@@ -123,19 +124,27 @@ else:
             # scores[k] = metrics.accuracy_score(Y_test,y_pred_knn)
             # scores_list.append(metrics.accuracy_score(Y_test,y_pred_knn))
         knn_accuracy = round(100 * accuracy_score(Y_test, y_pred_knn), 2)
+        knn_eval = classification_report(Y_test, y_pred_knn,output_dict = True)
+        knn_eval_df = pd.DataFrame(knn_eval).transpose()
         # scoress = st.pd.dataframe(scores)
 
     #===================== Bayes Gaussian =============
         gaussian    = GaussianNB()
         gaussian.fit(X_train,Y_train)
-        y_pred_gs   =  gaussian.predict(X_test)
-        gauss_accuracy  = round(100*accuracy_score(Y_test, y_pred_gs),2)
+        y_pred_gaussian   =  gaussian.predict(X_test)
+        gauss_accuracy  = round(100*accuracy_score(Y_test, y_pred_gaussian),2)
+        gaussian_eval = classification_report(Y_test, y_pred_gaussian,output_dict = True)
+        gaussian_eval_df = pd.DataFrame(gaussian_eval).transpose()
 
     #===================== Decission tree =============
         decission3  = DecisionTreeClassifier(criterion="gini")
         decission3.fit(X_train,Y_train)
         y_pred_decission3 = decission3.predict(X_test)
         decission3_accuracy = round(100*accuracy_score(Y_test, y_pred_decission3),2)
+        decission3_eval = classification_report(Y_test, y_pred_decission3,output_dict = True)
+        decission3_eval_df = pd.DataFrame(decission3_eval).transpose()
+
+        # decission3_accuracy.dtype
         st.markdown("---")
     
     #===================== Cek Box ====================
@@ -151,16 +160,46 @@ else:
             st.info("Dengan menggunakan metode Bayes Gaussian didapatkan hasil akurasi sebesar:")
             st.info(f"Akurasi = {gauss_accuracy}%")
             st.markdown("---")
+
         if decission3_cekbox:
             st.write("##### Decission Tree")
             st.success("Dengan menggunakan metode Decission tree didapatkan hasil akurasi sebesar:")
             st.success(f"Akurasi = {decission3_accuracy}%")
-            
+
+#=========================== Evaluasi ==================================
+    with evaluasi:
+        st.write("# Evaluasi")
+        col1, col2, col3 = st.columns(3)
+        with col1:
+            st.warning("Model KNN")
+            st.write(knn_eval_df)
+        with col2:
+            st.info("Model Naive-Bayes Gaussian")
+            st.write(gaussian_eval_df )
+        with col3:
+            st.success("Model Decission Tree")
+            st.write(decission3_eval_df)
+    #===================== Grafik Visual ====================   
+        st.markdown("---")
+        st.write("##### Visualisasi Model")
+        visual = pd.DataFrame({'Akurasi': [knn_accuracy,gauss_accuracy,decission3_accuracy],'Model':['KNN','Naive-Bayes Gaussian','Decission Tree']})
+        chart = alt.Chart(visual).mark_bar().encode(
+            y = "Akurasi",
+            x = "Model",
+        )
+        st.altair_chart(chart, use_container_width=True)
+
 #=========================== Implementasi ===============================
     with implementasi:
         st.write("# Implementasi")
         st.info("Dalam melakukan pengecekan tingkat stres harus menggunakan 3 fitur data yang didapatkan dari melakukan beberapa aktivitas dan diukur menggunakan sebuah sensor. Aktivitas:")
-        st.image("aktivitas.png",width=300)
+        col1,col2,col3 = st.columns(3)
+        with col1:
+            st.write("")
+        with col2:
+            st.image("aktivitas.png",use_column_width="auto")
+        with col3:
+            st.write("")
         st.markdown("---")
         st.write("##### Input fitur")
         name = st.text_input("Masukkan nama anda")
@@ -186,8 +225,8 @@ else:
 #============================ Normalisasi inputan =============================
         inputan = [[humidity_mean, temperature_mean, step_count_mean]]
         inputan_norm = scaler.transform(inputan)
-        # inputan_norm
         # inputan
+        # inputan_norm
         FIRST_IDX = 0
         if cek_hasil:
             hasil_prediksi = use_model.predict(inputan_norm)[FIRST_IDX]
