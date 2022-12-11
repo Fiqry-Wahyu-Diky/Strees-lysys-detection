@@ -62,9 +62,17 @@ else:
         with dataset:
             st.write("# Data")
             data = pd.read_csv("Stress-Lysis.csv")
+            # jumlah_data = (data['humidity']).count()
+            # st.success(jumlah_data)
+            banyak_data = len(data)
+            st.success(f"#### Banyak data yang digunakan sejumlah : {banyak_data}")
             data
         with keterangan:
             st.write("Berikut beberapa keterangan yang ada dalam dataset:")
+            st.info("#### Class data yang digunakan sejumlah 3 yaitu:")
+            st.write('0 : Low Stress')
+            st.write('1 : Normal Stress')
+            st.write('2 : High Stress')
             st.info("#### Tipe data")
             data.dtypes
             #===================================
